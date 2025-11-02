@@ -45,7 +45,8 @@ body, html {
   line-height: 1.45;
   opacity: 0;
   transform: translateY(8px);
-  transition: opacity .45s ease, transform .45s ease;
+ text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  transition: all 0.3s ease;
 
   /* 기본값 (섹션/캡션에서 자유롭게 오버라이드) */
   --cap-alpha: 0.82; /* 배경 투명도 */
@@ -72,6 +73,15 @@ body, html {
   backdrop-filter: blur(var(--cap-blur));
   -webkit-backdrop-filter: blur(var(--cap-blur));
 }
+/* 다크/라이트 톤별 조정 */
+.caption--dark h2 {
+  color: rgba(255, 255, 255, 0.93);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);
+}
+.caption--light h2 {
+  color: rgba(30, 30, 30, 0.85);
+  text-shadow: 0 1px 6px rgba(255, 255, 255, 0.5);
+}
 
 /* 투명도 프리셋 (data-alpha="20" → 0.20 …) */
 .caption[data-alpha="20"] { --cap-alpha: .20; }
@@ -86,6 +96,8 @@ body, html {
 .caption[data-alpha="85"] { --cap-alpha: .85; }
 .caption[data-alpha="90"] { --cap-alpha: .90; }
 .caption[data-alpha="95"] { --cap-alpha: .95; }
+
+
 
 /* 타이포 */
 .caption h2 {
@@ -187,4 +199,66 @@ body, html {
   .scroll-nav { right: 10px; gap: 10px; }
   .scroll-nav a { width: 6px; height: 6px; }
   .scroll-to-top-btn { width: 80px; height: 80px; left: 20px; bottom: 20px; }
+}
+
+
+/* ✅ 캡션 배경 제거 */
+.caption {
+  background: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* ✅ h2 세련되고 작게 */
+.caption h2 {
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  font-size: clamp(0.9rem, 1.8vw, 1.4rem);
+  line-height: 1.45;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.3em;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6); /* ✨ 자연스러운 명암 */
+  transition: all 0.3s ease;
+}
+
+
+/* ✅ 캡션 배경 & 테두리 완전 제거 */
+.caption {
+  background: none !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* ✅ 세련되고 작은 h2 */
+.caption h2 {
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  font-size: clamp(0.9rem, 1.8vw, 1.4rem);
+  line-height: 1.45;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.3em;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  transition: all 0.3s ease;
+}
+
+/* 톤별 색상 */
+.caption--dark h2 {
+  color: rgba(255, 255, 255, 0.93);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);
+}
+.caption--light h2 {
+  color: rgba(30, 30, 30, 0.85);
+  text-shadow: 0 1px 6px rgba(255, 255, 255, 0.5);
+}
+
+/* p도 살짝 은은하게 */
+.caption p {
+  font-size: clamp(0.7rem, 1.2vw, 1rem);
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+  margin: 0;
 }

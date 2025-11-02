@@ -77,7 +77,7 @@ function initFirstSection() {
   navDots.forEach(a => a.classList.toggle('active', a.dataset.target === id));
 
   // 스크롤 위치 보정
-  scroller.scrollTo({ top: 0 });
+  scroller.scrollTo({ top: 10 });
 
   // 섹션 active(캡션 표시)
   sections.forEach(s => s.classList.toggle('active', s === first));

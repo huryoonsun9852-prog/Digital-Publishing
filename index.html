@@ -3,13 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>스크롤 스냅 · 20 섹션</title>
+  <title>2060, 남겨진 장면들</title>
 
   <!-- ✅ 파비콘: xmlns 오타 수정 (child.svg → 정식 SVG 네임스페이스) -->
-  <link rel="icon" type="image/svg+xml"
-    href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="%236C32A6" offset="0"/><stop stop-color="%23723BBF" offset="1"/></linearGradient></defs><rect width="512" height="512" rx="96" fill="url(%23g)"/><g fill="white"><circle cx="168" cy="208" r="40"/><circle cx="344" cy="208" r="40"/><path d="M128 336c64 48 192 48 256 0" stroke="white" stroke-width="40" stroke-linecap="round" fill="none"/></g></svg>' />
-
-  <link rel="stylesheet" href="./styles.css" />
+<link rel="icon" type="image/svg+xml" href="child.svg">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <!-- (옵션) three.js 캔버스: 현재는 미사용이지만 DOM 충돌 없음 -->
@@ -43,24 +41,25 @@
 
     <!-- ✅ 섹션 1~20 (중복 없이 한 번만) -->
     <section class="media-section" id="s1">
-      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata">
         <source src="./videos/section1.mp4" type="video/mp4" />
       </video>
-      <div class="caption caption--bottom-left caption--light" data-alpha="80">
-        <h2>섹션 1 제목</h2>
-        <p>여기에 설명을 넣어줘. 톤/위치/투명도는 클래스/속성으로 바로 조절.</p>
-      </div>
+    
     </section>
 
-    <section class="media-section" id="s2" style="--cap-alpha:.60;">
-      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
-        <source src="./videos/section2.mp4" type="video/mp4" />
-      </video>
-      <div class="caption caption--center caption--dark">
-        <h2>섹션 2 제목</h2>
-        <p>설명 텍스트. 이 섹션은 섹션 단위로 투명도(0.6) 적용.</p>
-      </div>
-    </section>
+<section class="media-section" id="s2" style="--cap-alpha:.60;">
+  <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+    <source src="./videos/section2.mp4" type="video/mp4" />
+  </video>
+
+  <div class="caption caption--bottom-right caption--dark"
+       style="background:none !important; box-shadow:none !important; border:none !important; outline:none !important;">
+    <h2>한국은 인류 역사상 전례없는 출산율 위기를 수십년간 경험하고 있습니다.</h2>
+    <p>*2023년 기준 0.7</p>
+  </div>
+</section>
+</section>
+
 
     <section class="media-section" id="s3">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
