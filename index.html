@@ -5,25 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>스크롤 스냅 · 20 섹션</title>
 
+  <!-- ✅ 파비콘: xmlns 오타 수정 (child.svg → 정식 SVG 네임스페이스) -->
   <link rel="icon" type="image/svg+xml"
     href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="%236C32A6" offset="0"/><stop stop-color="%23723BBF" offset="1"/></linearGradient></defs><rect width="512" height="512" rx="96" fill="url(%23g)"/><g fill="white"><circle cx="168" cy="208" r="40"/><circle cx="344" cy="208" r="40"/><path d="M128 336c64 48 192 48 256 0" stroke="white" stroke-width="40" stroke-linecap="round" fill="none"/></g></svg>' />
 
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <canvas id="threeJsCanvas"></canvas>
+  <!-- (옵션) three.js 캔버스: 현재는 미사용이지만 DOM 충돌 없음 -->
+  <canvas id="threeJsCanvas" aria-hidden="true"></canvas>
 
-  <!-- 도트 네비 -->
+  <!-- 우측 도트 네비 -->
   <nav class="scroll-nav" aria-label="섹션 네비게이션">
-    <a href="#s1" data-target="s1" aria-label="Section 1"></a>
-    <a href="#s2" data-target="s2" aria-label="Section 2"></a>
-    <a href="#s3" data-target="s3" aria-label="Section 3"></a>
-    <a href="#s4" data-target="s4" aria-label="Section 4"></a>
-    <a href="#s5" data-target="s5" aria-label="Section 5"></a>
-    <a href="#s6" data-target="s6" aria-label="Section 6"></a>
-    <a href="#s7" data-target="s7" aria-label="Section 7"></a>
-    <a href="#s8" data-target="s8" aria-label="Section 8"></a>
-    <a href="#s9" data-target="s9" aria-label="Section 9"></a>
+    <a href="#s1"  data-target="s1"  aria-label="Section 1"></a>
+    <a href="#s2"  data-target="s2"  aria-label="Section 2"></a>
+    <a href="#s3"  data-target="s3"  aria-label="Section 3"></a>
+    <a href="#s4"  data-target="s4"  aria-label="Section 4"></a>
+    <a href="#s5"  data-target="s5"  aria-label="Section 5"></a>
+    <a href="#s6"  data-target="s6"  aria-label="Section 6"></a>
+    <a href="#s7"  data-target="s7"  aria-label="Section 7"></a>
+    <a href="#s8"  data-target="s8"  aria-label="Section 8"></a>
+    <a href="#s9"  data-target="s9"  aria-label="Section 9"></a>
     <a href="#s10" data-target="s10" aria-label="Section 10"></a>
     <a href="#s11" data-target="s11" aria-label="Section 11"></a>
     <a href="#s12" data-target="s12" aria-label="Section 12"></a>
@@ -39,61 +41,206 @@
 
   <div class="video-container" id="scroller">
 
-    <!-- 1 -->
+    <!-- ✅ 섹션 1~20 (중복 없이 한 번만) -->
     <section class="media-section" id="s1">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section1.mp4" type="video/mp4" />
       </video>
-
-      <!-- ✨ 섹션 텍스트(예시) -->
-      <div class="caption caption--bottom-left caption--light">
-        <h2>프로젝트 오프닝</h2>
-        <p>AI·디자인·브랜딩을 관통하는 20개의 씬으로 구성된 인터랙티브 릴.</p>
+      <div class="caption caption--bottom-left caption--light" data-alpha="80">
+        <h2>섹션 1 제목</h2>
+        <p>여기에 설명을 넣어줘. 톤/위치/투명도는 클래스/속성으로 바로 조절.</p>
       </div>
     </section>
 
-    <!-- 2 -->
-    <section class="media-section" id="s2">
+    <section class="media-section" id="s2" style="--cap-alpha:.60;">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section2.mp4" type="video/mp4" />
       </video>
-
       <div class="caption caption--center caption--dark">
-        <h2>문제 정의</h2>
-        <p>MZ의 짧은 주의 지속 시간을 고려한 숏폼 레시피 소비 행태 분석.</p>
+        <h2>섹션 2 제목</h2>
+        <p>설명 텍스트. 이 섹션은 섹션 단위로 투명도(0.6) 적용.</p>
       </div>
     </section>
 
-    <!-- 3~19 (필요 시 같은 패턴으로 .caption 추가) -->
-    <section class="media-section" id="s3"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section3.mp4" type="video/mp4" /></video></section>
-    <section class="media-section" id="s4"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section4.mp4" type="video/mp4" /></video></section>
-    <section class="media-section" id="s5"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section5.mp4" type="video/mp4" /></video></section>
-    <section class="media-section" id="s6"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section6.mp4" type="video/mp4" /></video></section>
-    <section class="media-section" id="s7"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section7.mp4" type="video/mp4" /></video></section>
-    <section class="media-section" id="s8"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section8.mp4" type="video/mp4" /></video></section>
-    <section class="media-section" id="s9"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section9.mp4" type="video/mp4" /></video></section>
-    <section class="media-section" id="s10"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section10.mp4" type="video/mp4" /></video></section>
-    <section class="media-section" id="s11"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section11.mp4" type="video/mp4" /></video></section>
-    <section class="media-section" id="s12"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section12.mp4" type="video/mp4" /></video></section>
-    <section class="media-section" id="s13"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section13.mp4" type="video/mp4" /></video></section>
-    <section class="media-section" id="s14"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section14.mp4" type="video/mp4" /></video></section>
-    <section class="media-section" id="s15"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section15.mp4" type="video/mp4" /></video></section>
-    <section class="media-section" id="s16"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section16.mp4" type="video/mp4" /></video></section>
-    <section class="media-section" id="s17"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section17.mp4" type="video/mp4" /></video></section>
-    <section class="media-section" id="s18"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section18.mp4" type="video/mp4" /></video></section>
-    <section class="media-section" id="s19"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section19.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s3">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section3.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--top-right caption--light" data-alpha="70">
+        <h2>섹션 3 제목</h2>
+        <p>가독성에 따라 data-alpha 값만 바꿔줘.</p>
+      </div>
+    </section>
 
-    <!-- 20 -->
+    <section class="media-section" id="s4">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section4.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--bottom-right caption--dark" data-alpha="50">
+        <h2>섹션 4 제목</h2>
+        <p>dark 톤 + 0.5 투명도.</p>
+      </div>
+    </section>
+
+    <section class="media-section" id="s5">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section5.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--bottom-left caption--light" data-alpha="30">
+        <h2>섹션 5 제목</h2>
+        <p>라이트 톤 + 살짝 투명(0.3).</p>
+      </div>
+    </section>
+
+    <section class="media-section" id="s6">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section6.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--center caption--dark" style="--cap-alpha:.42;">
+        <h2>섹션 6 제목</h2>
+        <p>정밀 제어: 인라인으로 --cap-alpha 지정.</p>
+      </div>
+    </section>
+
+    <section class="media-section" id="s7">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section7.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--top-left caption--light" data-alpha="80">
+        <h2>섹션 7 제목</h2>
+        <p>위치 프리셋 top-left.</p>
+      </div>
+    </section>
+
+    <section class="media-section" id="s8">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section8.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--bottom-right caption--dark" data-alpha="60">
+        <h2>섹션 8 제목</h2>
+        <p>콘트라스트 높은 영상에 적합.</p>
+      </div>
+    </section>
+
+    <section class="media-section" id="s9">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section9.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--bottom-left caption--light" data-alpha="70">
+        <h2>섹션 9 제목</h2>
+        <p>설명 텍스트.</p>
+      </div>
+    </section>
+
+    <section class="media-section" id="s10">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section10.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--top-right caption--dark" data-alpha="55">
+        <h2>섹션 10 제목</h2>
+        <p>설명 텍스트.</p>
+      </div>
+    </section>
+
+    <section class="media-section" id="s11">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section11.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--center caption--light" data-alpha="85">
+        <h2>섹션 11 제목</h2>
+        <p>설명 텍스트.</p>
+      </div>
+    </section>
+
+    <section class="media-section" id="s12">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section12.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--bottom-right caption--dark" data-alpha="48">
+        <h2>섹션 12 제목</h2>
+        <p>설명 텍스트.</p>
+      </div>
+    </section>
+
+    <section class="media-section" id="s13">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section13.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--bottom-left caption--light" data-alpha="75">
+        <h2>섹션 13 제목</h2>
+        <p>설명 텍스트.</p>
+      </div>
+    </section>
+
+    <section class="media-section" id="s14">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section14.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--top-left caption--dark" data-alpha="45">
+        <h2>섹션 14 제목</h2>
+        <p>설명 텍스트.</p>
+      </div>
+    </section>
+
+    <section class="media-section" id="s15">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section15.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--top-right caption--light" data-alpha="65">
+        <h2>섹션 15 제목</h2>
+        <p>설명 텍스트.</p>
+      </div>
+    </section>
+
+    <section class="media-section" id="s16">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section16.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--center caption--dark" data-alpha="52">
+        <h2>섹션 16 제목</h2>
+        <p>설명 텍스트.</p>
+      </div>
+    </section>
+
+    <section class="media-section" id="s17">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section17.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--bottom-left caption--light" data-alpha="78">
+        <h2>섹션 17 제목</h2>
+        <p>설명 텍스트.</p>
+      </div>
+    </section>
+
+    <section class="media-section" id="s18">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section18.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--top-left caption--dark" data-alpha="40">
+        <h2>섹션 18 제목</h2>
+        <p>설명 텍스트.</p>
+      </div>
+    </section>
+
+    <section class="media-section" id="s19">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section19.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--bottom-right caption--light" data-alpha="70">
+        <h2>섹션 19 제목</h2>
+        <p>설명 텍스트.</p>
+      </div>
+    </section>
+
     <section class="media-section" id="s20">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section20.mp4" type="video/mp4" />
       </video>
-
-      <div class="caption caption--bottom-right caption--light">
-        <h2>리캡 & 다음 단계</h2>
-        <p>사용성 테스트 → 디자인 시스템 → 파일럿 론칭 로드맵.</p>
+      <div class="caption caption--bottom-right caption--light" data-alpha="85">
+        <h2>섹션 20 제목</h2>
+        <p>마지막 섹션. 아래 “다시보기”로 바로 맨 위로.</p>
       </div>
-
+      <!-- ✅ 마지막 섹션에서만 노출 -->
       <button class="scroll-to-top-btn"
               aria-label="맨 위로 이동"
               onclick="document.getElementById('scroller').scrollTo({ top: 0, behavior: 'smooth' })">

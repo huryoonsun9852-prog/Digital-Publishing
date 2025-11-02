@@ -18,14 +18,14 @@ const playObserver = new IntersectionObserver((entries) => {
   });
 }, { root: scroller, threshold: 0.6, rootMargin: '1px 0px 1px 0px' });
 
-// 도트 활성화 + 섹션 active 토글(캡션 표시 트리거)
+// 도트 활성화 + 섹션 active 토글(캡션 표시)
 const dotObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       const id = entry.target.id;
       // 도트 on/off
       navDots.forEach(a => a.classList.toggle('active', a.dataset.target === id));
-      // URL 해시
+      // URL 해시 업데이트 (히스토리 오염 없이)
       history.replaceState(null, '', `#${id}`);
       // 섹션 active(캡션 표시)
       sections.forEach(s => s.classList.toggle('active', s === entry.target));
@@ -47,7 +47,7 @@ navDots.forEach(a => {
   });
 });
 
-// 스냅 보정
+// 스냅 보정(섹션 중앙에 가장 가까운 곳으로 부드럽게 스냅)
 let isSnapping = false;
 let snapTimeout;
 scroller.addEventListener('scroll', () => {
@@ -60,6 +60,7 @@ scroller.addEventListener('scroll', () => {
       const r = s.getBoundingClientRect();
       return { el: s, d: Math.abs((r.top + r.height / 2) - centerY) };
     }).sort((a, b) => a.d - b.d)[0];
+    if (!nearest) return;
     isSnapping = true;
     nearest.el.scrollIntoView({ behavior: 'smooth' });
     setTimeout(() => { isSnapping = false; }, 600);
@@ -98,6 +99,7 @@ function initFirstSection() {
 
 window.addEventListener('load', () => {
   initFirstSection();
+  // 옵저버 강제 갱신
   requestAnimationFrame(() => {
     playObserver.takeRecords();
     dotObserver.takeRecords();

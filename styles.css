@@ -7,6 +7,7 @@ body, html {
   font-family: 'Pretendard', 'Inter', sans-serif;
 }
 
+/* 컨테이너 & 섹션 */
 .video-container {
   height: 100vh;
   width: 100vw;
@@ -14,7 +15,6 @@ body, html {
   scroll-snap-type: y mandatory;
   -webkit-overflow-scrolling: touch;
 }
-
 .media-section {
   height: 100vh;
   width: 100vw;
@@ -35,19 +35,21 @@ body, html {
 .fullscreen-video { opacity: 0; }
 .fullscreen-video.playing { opacity: 1; }
 
-/* ───────── Caption(텍스트 오버레이) ───────── */
+/* 캡션(텍스트 오버레이) */
 .caption {
   position: absolute;
   z-index: 2;
   max-width: min(720px, 80vw);
   padding: 20px 24px;
   border-radius: 16px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   line-height: 1.45;
   opacity: 0;
   transform: translateY(8px);
   transition: opacity .45s ease, transform .45s ease;
+
+  /* 기본값 (섹션/캡션에서 자유롭게 오버라이드) */
+  --cap-alpha: 0.82; /* 배경 투명도 */
+  --cap-blur: 8px;   /* 블러 강도 */
 }
 
 /* 섹션이 활성화될 때만 등장 */
@@ -59,13 +61,31 @@ body, html {
 /* 톤 */
 .caption--light {
   color: #0D0D0D;
-  background: rgba(255,255,255,0.82);
+  background: rgba(255, 255, 255, var(--cap-alpha));
+  backdrop-filter: blur(var(--cap-blur));
+  -webkit-backdrop-filter: blur(var(--cap-blur));
 }
 .caption--dark {
   color: #fff;
-  background: rgba(0,0,0,0.48);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(0, 0, 0, var(--cap-alpha));
+  border: 1px solid rgba(255,255,255, calc(var(--cap-alpha) * 0.25));
+  backdrop-filter: blur(var(--cap-blur));
+  -webkit-backdrop-filter: blur(var(--cap-blur));
 }
+
+/* 투명도 프리셋 (data-alpha="20" → 0.20 …) */
+.caption[data-alpha="20"] { --cap-alpha: .20; }
+.caption[data-alpha="30"] { --cap-alpha: .30; }
+.caption[data-alpha="40"] { --cap-alpha: .40; }
+.caption[data-alpha="50"] { --cap-alpha: .50; }
+.caption[data-alpha="60"] { --cap-alpha: .60; }
+.caption[data-alpha="65"] { --cap-alpha: .65; }
+.caption[data-alpha="70"] { --cap-alpha: .70; }
+.caption[data-alpha="75"] { --cap-alpha: .75; }
+.caption[data-alpha="80"] { --cap-alpha: .80; }
+.caption[data-alpha="85"] { --cap-alpha: .85; }
+.caption[data-alpha="90"] { --cap-alpha: .90; }
+.caption[data-alpha="95"] { --cap-alpha: .95; }
 
 /* 타이포 */
 .caption h2 {
@@ -80,8 +100,8 @@ body, html {
 }
 
 /* 위치 프리셋 */
-.caption--top-left     { top: 7vh;  left: 6vw;  }
-.caption--top-right    { top: 7vh;  right: 6vw; }
+.caption--top-left     { top: 7vh;   left: 6vw; }
+.caption--top-right    { top: 7vh;   right: 6vw; }
 .caption--bottom-left  { bottom: 8vh; left: 6vw; }
 .caption--bottom-right { bottom: 8vh; right: 6vw; }
 .caption--center {
@@ -89,7 +109,7 @@ body, html {
   transform: translate(-50%, -50%);
 }
 .media-section.active .caption--center {
-  transform: translate(-50%, -50%); /* 활성화 시 살짝 들어오는 효과는 위에서 제어 */
+  transform: translate(-50%, -50%);
 }
 
 /* 모바일 보정 */
@@ -97,21 +117,21 @@ body, html {
   .caption { max-width: 86vw; padding: 16px 18px; border-radius: 14px; }
 }
 
-/* ── 마지막 섹션 전용 "다시보기" 버튼 ── */
+/* 마지막 섹션 "다시보기" 버튼 */
 .scroll-to-top-btn {
-  position: absolute; 
-  bottom: 30px; 
-  left: 30px; 
-  background-color: rgba(0, 0, 0, 0.7); 
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  background-color: rgba(0, 0, 0, 0.7);
   color: white;
   border: none;
-  border-radius: 50%; 
-  width: 100px; 
+  border-radius: 50%;
+  width: 100px;
   height: 100px;
   font-size: 1.1em;
   font-weight: bold;
   cursor: pointer;
-  display: flex; 
+  display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -120,11 +140,11 @@ body, html {
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 .scroll-to-top-btn:hover {
-  background-color: rgba(0, 0, 0, 0.9); 
+  background-color: rgba(0, 0, 0, 0.9);
   transform: scale(1.05);
 }
 
-/* 도트 네비  */
+/* 우측 도트 네비 (미니멀, 무채색) */
 .scroll-nav {
   position: fixed;
   right: 28px;
@@ -133,7 +153,7 @@ body, html {
   z-index: 4;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 14px;
   padding: 0;
   background: transparent;
   border: none;
