@@ -2,36 +2,67 @@ const sections = document.querySelectorAll('.media-section');
 const navDots  = document.querySelectorAll('.scroll-nav a');
 const scroller = document.getElementById('scroller');
 
-// 비디오 자동 재생/정지
+// === 공통 유틸: 비디오 0초로 안전 리셋 ===
+function resetToStart(v) {
+  const doReset = () => {
+    try {
+      // 일부 브라우저(iOS)에서 seekable 구간 시작점이 0이 아닐 수 있어 보정
+      if (v.seekable && v.seekable.length > 0) {
+        const start = v.seekable.start(0);
+        v.currentTime = start || 0;
+      } else {
+        v.currentTime = 0;
+      }
+    } catch (_) {
+      // 드문 케이스 보호
+      v.currentTime = 0;
+    }
+  };
+
+  // 메타데이터가 아직이면 로드 후에 0초 세팅
+  if (v.readyState >= 1) {
+    doReset();
+  } else {
+    v.addEventListener('loadedmetadata', doReset, { once: true });
+  }
+}
+
+// === 재생/정지 관찰자: 섹션 나가면 무조건 0초 리셋 ===
 const playObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     const vids = entry.target.querySelectorAll('video.fullscreen-video');
     vids.forEach(v => {
       if (entry.isIntersecting) {
-        v.play().catch(() => {});
+        // 화면 안: 부드럽게 재생
         v.classList.add('playing');
+        // iOS/크롬 타이밍 이슈 방지용 rAF
+        requestAnimationFrame(() => v.play().catch(() => {}));
       } else {
-        v.pause();
+        // 화면 밖: 즉시 멈춤 + 0초 리셋 + 페이드아웃
+        try { v.pause(); } catch {}
         v.classList.remove('playing');
+
+        // 너무 빠른 스크롤에서 currentTime 적용 누락 방지:
+        // 1) 즉시 시도
+        resetToStart(v);
+        // 2) 다음 프레임 한 번 더 보장
+        requestAnimationFrame(() => resetToStart(v));
       }
     });
   });
-}, { root: scroller, threshold: 0.6, rootMargin: '1px 0px 1px 0px' });
+}, { root: scroller, threshold: 0.65, rootMargin: '1px 0px 1px 0px' });
 
-// 도트 활성화 + 섹션 active 토글(캡션 표시)
+// === 도트/캡션 활성화 관찰자 ===
 const dotObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       const id = entry.target.id;
-      // 도트 on/off
       navDots.forEach(a => a.classList.toggle('active', a.dataset.target === id));
-      // URL 해시 업데이트 (히스토리 오염 없이)
       history.replaceState(null, '', `#${id}`);
-      // 섹션 active(캡션 표시)
       sections.forEach(s => s.classList.toggle('active', s === entry.target));
     }
   });
-}, { root: scroller, threshold: 0.6, rootMargin: '1px 0px 1px 0px' });
+}, { root: scroller, threshold: 0.65, rootMargin: '1px 0px 1px 0px' });
 
 // 옵저버 등록
 sections.forEach(sec => {
@@ -47,7 +78,7 @@ navDots.forEach(a => {
   });
 });
 
-// 스냅 보정(섹션 중앙에 가장 가까운 곳으로 부드럽게 스냅)
+// 스냅 보정(섹션 중앙에 가장 가까운 곳으로 스냅)
 let isSnapping = false;
 let snapTimeout;
 scroller.addEventListener('scroll', () => {
@@ -73,33 +104,32 @@ function initFirstSection() {
   if (!first) return;
 
   // 도트 활성화
-  const id = first.id;
-  navDots.forEach(a => a.classList.toggle('active', a.dataset.target === id));
+  navDots.forEach(a => a.classList.toggle('active', a.dataset.target === first.id));
 
-  // 스크롤 위치 보정
+  // 스크롤 위치 살짝 보정(옵저버 트리거)
   scroller.scrollTo({ top: 10 });
 
-  // 섹션 active(캡션 표시)
+  // 캡션 표시
   sections.forEach(s => s.classList.toggle('active', s === first));
 
-  // 비디오 재생
+  // 비디오 재생 준비
   const v = first.querySelector('video.fullscreen-video');
   if (v) {
-    const playNow = () => v.play().catch(() => {});
-    const showNow = () => v.classList.add('playing');
-
-    if (v.readyState >= 2) {
-      showNow(); playNow();
-    } else {
-      v.addEventListener('loadeddata', () => { showNow(); playNow(); }, { once: true });
-      v.addEventListener('canplay', () => { showNow(); playNow(); }, { once: true });
+    const showAndPlay = () => {
+      resetToStart(v);             // 첫 섹션도 항상 처음부터
+      v.classList.add('playing');
+      v.play().catch(() => {});
+    };
+    if (v.readyState >= 2) showAndPlay();
+    else {
+      v.addEventListener('loadeddata', showAndPlay, { once: true });
+      v.addEventListener('canplay', showAndPlay, { once: true });
     }
   }
 }
 
 window.addEventListener('load', () => {
   initFirstSection();
-  // 옵저버 강제 갱신
   requestAnimationFrame(() => {
     playObserver.takeRecords();
     dotObserver.takeRecords();
