@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>스크롤 스냅 · 20 섹션</title>
+
+  <link rel="icon" type="image/svg+xml"
+    href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="%236C32A6" offset="0"/><stop stop-color="%23723BBF" offset="1"/></linearGradient></defs><rect width="512" height="512" rx="96" fill="url(%23g)"/><g fill="white"><circle cx="168" cy="208" r="40"/><circle cx="344" cy="208" r="40"/><path d="M128 336c64 48 192 48 256 0" stroke="white" stroke-width="40" stroke-linecap="round" fill="none"/></g></svg>' />
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <canvas id="threeJsCanvas"></canvas>
+
+  <!-- 도트 네비 -->
+  <nav class="scroll-nav" aria-label="섹션 네비게이션">
+    <a href="#s1" data-target="s1" aria-label="Section 1"></a>
+    <a href="#s2" data-target="s2" aria-label="Section 2"></a>
+    <a href="#s3" data-target="s3" aria-label="Section 3"></a>
+    <a href="#s4" data-target="s4" aria-label="Section 4"></a>
+    <a href="#s5" data-target="s5" aria-label="Section 5"></a>
+    <a href="#s6" data-target="s6" aria-label="Section 6"></a>
+    <a href="#s7" data-target="s7" aria-label="Section 7"></a>
+    <a href="#s8" data-target="s8" aria-label="Section 8"></a>
+    <a href="#s9" data-target="s9" aria-label="Section 9"></a>
+    <a href="#s10" data-target="s10" aria-label="Section 10"></a>
+    <a href="#s11" data-target="s11" aria-label="Section 11"></a>
+    <a href="#s12" data-target="s12" aria-label="Section 12"></a>
+    <a href="#s13" data-target="s13" aria-label="Section 13"></a>
+    <a href="#s14" data-target="s14" aria-label="Section 14"></a>
+    <a href="#s15" data-target="s15" aria-label="Section 15"></a>
+    <a href="#s16" data-target="s16" aria-label="Section 16"></a>
+    <a href="#s17" data-target="s17" aria-label="Section 17"></a>
+    <a href="#s18" data-target="s18" aria-label="Section 18"></a>
+    <a href="#s19" data-target="s19" aria-label="Section 19"></a>
+    <a href="#s20" data-target="s20" aria-label="Section 20"></a>
+  </nav>
+
+  <div class="video-container" id="scroller">
+
+    <!-- 1 -->
+    <section class="media-section" id="s1">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section1.mp4" type="video/mp4" />
+      </video>
+
+      <!-- ✨ 섹션 텍스트(예시) -->
+      <div class="caption caption--bottom-left caption--light">
+        <h2>프로젝트 오프닝</h2>
+        <p>AI·디자인·브랜딩을 관통하는 20개의 씬으로 구성된 인터랙티브 릴.</p>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="media-section" id="s2">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section2.mp4" type="video/mp4" />
+      </video>
+
+      <div class="caption caption--center caption--dark">
+        <h2>문제 정의</h2>
+        <p>MZ의 짧은 주의 지속 시간을 고려한 숏폼 레시피 소비 행태 분석.</p>
+      </div>
+    </section>
+
+    <!-- 3~19 (필요 시 같은 패턴으로 .caption 추가) -->
+    <section class="media-section" id="s3"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section3.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s4"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section4.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s5"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section5.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s6"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section6.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s7"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section7.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s8"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section8.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s9"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section9.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s10"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section10.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s11"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section11.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s12"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section12.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s13"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section13.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s14"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section14.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s15"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section15.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s16"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section16.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s17"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section17.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s18"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section18.mp4" type="video/mp4" /></video></section>
+    <section class="media-section" id="s19"><video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop><source src="./videos/section19.mp4" type="video/mp4" /></video></section>
+
+    <!-- 20 -->
+    <section class="media-section" id="s20">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section20.mp4" type="video/mp4" />
+      </video>
+
+      <div class="caption caption--bottom-right caption--light">
+        <h2>리캡 & 다음 단계</h2>
+        <p>사용성 테스트 → 디자인 시스템 → 파일럿 론칭 로드맵.</p>
+      </div>
+
+      <button class="scroll-to-top-btn"
+              aria-label="맨 위로 이동"
+              onclick="document.getElementById('scroller').scrollTo({ top: 0, behavior: 'smooth' })">
+        다시보기
+      </button>
+    </section>
+
+  </div>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
