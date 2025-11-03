@@ -45,7 +45,7 @@ body, html {
   line-height: 1.45;
   opacity: 0;
   transform: translateY(8px);
- text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+ text-shadow: 0 2px 10px rgb(255, 255, 255);
   transition: all 0.3s ease;
 
   /* 기본값 (섹션/캡션에서 자유롭게 오버라이드) */
@@ -261,4 +261,69 @@ body, html {
   color: rgba(255, 255, 255, 0.8);
   text-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
   margin: 0;
+}
+
+/* ===== Caption 개선 공통 ===== */
+.caption{
+  position: absolute;
+  color: #fff;
+  background: rgba(0,0,0, var(--cap-alpha, .60));
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  padding: var(--cap-pad, 14px 16px);
+  border-radius: 12px;
+  line-height: 1.55;
+  max-width: var(--cap-w, 42ch);
+  display: grid;
+  gap: var(--cap-gap, 8px);
+  box-shadow: 0 6px 24px rgba(0,0,0,.25);
+}
+
+/* 제목/본문 타이포 살짝 다듬기 */
+.caption h2{
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(16px, 2.0vw, 24px); /* 화면 따라 적응 */
+}
+.caption p{
+  margin: 0;
+  font-size: clamp(13px, 1.3vw, 16px);
+  opacity: .95;
+}
+
+/* ===== 우측 상단 정렬 ===== */
+.caption--top-right{
+  top: min(6vh, 64px);
+  right: min(5vw, 56px);
+  text-align: right;           /* 오른쪽 정렬 */
+}
+
+
+
+/* 모바일에서 폭/패딩 자동 보정 */
+@media (max-width: 640px){
+  .caption{
+    max-width: min(88vw, var(--cap-w, 42ch));
+    padding: 12px 14px;
+    border-radius: 10px;
+  }
+  .caption--top-right{
+    top: 4vh;
+    right: 4vw;
+  }
+}
+styles.css 맨 아래에 이걸 추가해줘 👇
+
+#s17 .caption h2 {
+  max-width: none;          /* 줄 제한 해제 */
+  white-space: normal;      /* 자연스러운 줄바꿈 허용 */
+  word-break: keep-all;     /* 단어 중간 끊김 방지 (한국어 예쁘게 줄바꿈) */
+}
+
+#s17 .caption {
+  max-width: none;          /* 전체 캡션 박스 폭 제한 해제 */
+}
+
+#s4 .caption--light p {
+  color: #111;  /* 또는 #222 / #000 등으로 원하는 톤 조절 */
 }

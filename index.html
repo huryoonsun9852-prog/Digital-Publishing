@@ -34,7 +34,6 @@
     <a href="#s17" data-target="s17" aria-label="Section 17"></a>
     <a href="#s18" data-target="s18" aria-label="Section 18"></a>
     <a href="#s19" data-target="s19" aria-label="Section 19"></a>
-    <a href="#s20" data-target="s20" aria-label="Section 20"></a>
   </nav>
 
   <div class="video-container" id="scroller">
@@ -44,12 +43,215 @@
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata">
         <source src="./videos/section1.mp4" type="video/mp4" />
       </video>
-    
+    <style>
+  :root{
+    --bg:#0b0f12;
+    --fg:#e8e8e8;
+    --accent1:#9de7ff;    /* 청록 하이라이트 */
+    --accent2:#ffd7a8;    /* 웜빛 하이라이트  */
+  }
+
+  /* 페이지 베이스 */
+  html,body{height:100%;margin:0;background:#000;}
+  body{
+    font-family: Pretendard, "Noto Sans KR", Apple SD Gothic Neo, Roboto, Arial, sans-serif;
+    color:var(--fg);
+    overflow:hidden;
+  }
+
+  /* 섹션 컨테이너 */
+  .section{
+    position:relative;
+    width:100vw;height:100vh;
+    background:var(--bg);
+  }
+
+  /* 풀스크린 비디오 */
+  .section video{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    transition:filter .8s ease, opacity .8s ease;
+    background:#000;
+  }
+  /* 비디오 끝난 뒤 살짝 어둡고 블러 */
+  .section video.dim{
+    filter:brightness(.35) blur(2px);
+  }
+
+  /* 타이틀 오버레이 */
+  .intro{
+    position:absolute; inset:0;
+    display:grid; place-items:center;
+    pointer-events:none;
+  }
+  .intro-inner{
+    text-align:center;
+    opacity:0; transform:translateY(12px);
+    transition:opacity .9s ease, transform .9s ease;
+    max-width:min(92vw, 1200px);
+    padding:0 4vw;
+  }
+  .intro.show .intro-inner{
+    opacity:1; transform:translateY(0);
+  }
+
+  /* 큰 타이틀 (이미지 느낌의 글로우/그레인/색수차) */
+  .title{
+    font-weight:900;
+    letter-spacing:.02em;
+    font-size:clamp(48px, 9vw, 152px);
+    line-height:1.06;
+    margin:0 0 .18em;
+    /* 그라디언트 텍스처 */
+    background:
+      radial-gradient(120% 200% at 0% 0%, #c7f0ff 0%, #cfe 18%, transparent 33%),
+      radial-gradient(140% 220% at 100% 100%, #ffe2b8 0%, #f6d9b0 22%, transparent 40%),
+      linear-gradient(180deg, #f4f4f4 0%, #d9d9d9 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+
+    /* 약한 색수차(크로마틱 애버레이션) */
+    text-shadow:
+      0 0 0 rgba(0,0,0,0),                /* 실제 그림자 제거 */
+      0 0 18px rgba(255,255,255,.08),     /* 소프트 글로우 */
+      1px 0   0 rgba(55, 245, 255, .28),  /* 시안 */
+     -1px 0   0 rgba(255, 180, 120, .22); /* 웜 */
+    filter: contrast(1.02) saturate(1.05);
+    position:relative;
+  }
+
+  /* 필름 그레인 느낌 */
+  .title::after{
+    content:"";
+    position:absolute; inset:-6% -4%;
+    pointer-events:none; z-index:-1;
+    opacity:.25;
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.15) 0 40%, transparent 41%),
+      radial-gradient(2px 2px at 70% 60%, rgba(255,255,255,.12) 0 40%, transparent 41%),
+      radial-gradient(2px 2px at 40% 80%, rgba(255,255,255,.10) 0 40%, transparent 41%),
+      radial-gradient(2px 2px at 85% 25%, rgba(255,255,255,.13) 0 40%, transparent 41%);
+    mix-blend-mode:screen;
+    animation:grain 2.5s steps(6,end) infinite;
+  }
+  @keyframes grain{
+    0%{transform:translate(0,0)}
+    25%{transform:translate(-1.5%, .8%)}
+    50%{transform:translate(1%, -1%)}
+    75%{transform:translate(.6%, .4%)}
+    100%{transform:translate(0,0)}
+  }
+
+  /* 서브 타이틀 */
+  .subtitle{
+    margin:0;
+    font-weight:700;
+    letter-spacing:.02em;
+    font-size:clamp(16px, 2.4vw, 36px);
+    line-height:1.3;
+    color:#d6d6d6;
+    /* 미세한 메탈릭/웜톤 감 */
+    background:linear-gradient(180deg, #e9e9e9 0%, #c8c8c8 60%, #f3d7b6 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow:
+      0 0 10px rgba(255,255,255,.06),
+      .6px 0 0 rgba(160, 240, 255, .18),
+     -.6px 0 0 rgba(255, 190, 140, .16);
+  }
+
+  /* 안전 여백 & 작게 볼 때 간격 보정 */
+  .stack{display:flex; flex-direction:column; gap:.28em;}
+
+  /* 초기엔 숨김 */
+  .intro{opacity:1;}
+  .intro:not(.show) .intro-inner{opacity:0}
+
+  /* 접근성: 키보드 포커스 안보이도록(클릭 요소 없음) */
+  :focus{outline:none}
+</style>
+</head>
+<body>
+  <section class="section" id="s1">
+    <!-- 네 영상 경로로 교체 -->
+    <video id="leadVideo" muted playsinline preload="metadata" autoplay>
+      <source src="./videos/section1.mp4" type="video/mp4">
+    </video>
+
+    <!-- 타이틀 오버레이 -->
+    <div class="intro" id="intro">
+      <div class="intro-inner">
+        <div class="stack">
+          <h1 class="title">한국은 붕괴한다.</h1>
+          
+          <p class="subtitle">2060년, 익숙한 공간 속 낯선 모습들</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<script>
+  (function(){
+    const video = document.getElementById('leadVideo');
+    const intro = document.getElementById('intro');
+    const showIntro = () => {
+      // 비디오를 부드럽게 디밍하고 타이틀 노출
+      video.classList.add('dim');
+      intro.classList.add('show');
+    };
+
+    // 1) 정상 케이스: 재생 종료 시
+    video.addEventListener('ended', showIntro, { once:true });
+
+    // 2) 모바일/브라우저별 이슈 대비: 거의 끝나면 미리 보여주기(마지막 0.4s)
+    let preShown = false;
+    video.addEventListener('timeupdate', () => {
+      if (preShown) return;
+      if (video.duration && (video.duration - video.currentTime) < 3) {
+        preShown = true; showIntro();
+      }
+    });
+
+    // 3) 자동재생이 막힌 경우 대비: 3초 후 강제 노출
+    const fallback = setTimeout(()=> {
+      if (!intro.classList.contains('show')) showIntro();
+    }, 3000);
+
+    // 재생 시작되면 폴백 타이머 제거
+    video.addEventListener('play', ()=> clearTimeout(fallback), { once:true });
+
+    // iOS 사파리 등에서 종료 후 첫 프레임이 검게 보이는 경우를 최소화
+    video.addEventListener('loadedmetadata', () => {
+      // object-fit:cover 상태에서 첫 프레임 준비
+      if (video.autoplay) video.muted = true;
+    });
+  })();
+</script>
+</body>
+</html>
+
     </section>
 
-<section class="media-section" id="s2" style="--cap-alpha:.60;">
+    <section class="media-section" id="s2">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section2.mp4" type="video/mp4" />
+      </video>
+      <div
+    class="caption caption--top-right caption--dark"
+    style="--cap-alpha: .58;        /* 배경투명도 0~1 */
+           --cap-w: 64ch;           /* 텍스트 줄길이(폭) */
+           --cap-pad: 16px 18px;    /* 패딩 */
+           --cap-gap: 10px;">       <!-- h2~p 간격 -->
+    <h2>본 웹사이트는 저출산과 고령화를 통계나 뉴스로 접하는<br>피상적 이해가 아니라 스크롤 기반의 그래픽 노블 형식을 통해<br>개인이 직접 감각적으로 체험할 수 있도록 기획하였습니다.</h2>
+    <p>젊은 세대가 사라진 공간과 노인들로 가득한 풍경의 대비,<br>그리고 익숙한 장소에서 마주하는 낯선 장면들을 통해<br>고령화 사회의 위기를 직관적으로 느낄 수 있도록 표현하였습니다.</p>
+  </div>
+    </section> 
+
+
+<section class="media-section" id="s3" style="--cap-alpha:.60;">
   <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
-    <source src="./videos/section2.mp4" type="video/mp4" />
+    <source src="./videos/section3.mp4" type="video/mp4" />
   </video>
 
   <div class="caption caption--bottom-right caption--dark"
@@ -61,33 +263,23 @@
 </section>
 
 
-    <section class="media-section" id="s3">
-      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
-        <source src="./videos/section3.mp4" type="video/mp4" />
-      </video>
-      <div class="caption caption--top-right caption--light" data-alpha="70">
-        <h2>섹션 3 제목</h2>
-        <p>가독성에 따라 data-alpha 값만 바꿔줘.</p>
-      </div>
-    </section>
-
     <section class="media-section" id="s4">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section4.mp4" type="video/mp4" />
       </video>
-      <div class="caption caption--bottom-right caption--dark" data-alpha="50">
-        <h2>섹션 4 제목</h2>
-        <p>dark 톤 + 0.5 투명도.</p>
+         <div class="caption caption--bottom-left caption--light" data-alpha="45">
+        <h2>머지않아 한국은 더이상 존재하지 않고,</h2>
+        <p>붕괴하기 시작 할 것 입니다.</p>
       </div>
     </section>
-
+    
     <section class="media-section" id="s5">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section5.mp4" type="video/mp4" />
       </video>
-      <div class="caption caption--bottom-left caption--light" data-alpha="30">
-        <h2>섹션 5 제목</h2>
-        <p>라이트 톤 + 살짝 투명(0.3).</p>
+      <div class="caption caption--top-left caption--dark" data-alpha="40">
+        <h2>그 붕괴는 어떤 모습일까요?</h2>
+        <p>익숙하지만 낯선 장면들을 경험해보세요.</p>
       </div>
     </section>
 
@@ -95,149 +287,98 @@
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section6.mp4" type="video/mp4" />
       </video>
-      <div class="caption caption--center caption--dark" style="--cap-alpha:.42;">
-        <h2>섹션 6 제목</h2>
-        <p>정밀 제어: 인라인으로 --cap-alpha 지정.</p>
-      </div>
     </section>
 
     <section class="media-section" id="s7">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section7.mp4" type="video/mp4" />
       </video>
-      <div class="caption caption--top-left caption--light" data-alpha="80">
-        <h2>섹션 7 제목</h2>
-        <p>위치 프리셋 top-left.</p>
-      </div>
     </section>
 
     <section class="media-section" id="s8">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section8.mp4" type="video/mp4" />
       </video>
-      <div class="caption caption--bottom-right caption--dark" data-alpha="60">
-        <h2>섹션 8 제목</h2>
-        <p>콘트라스트 높은 영상에 적합.</p>
-      </div>
     </section>
 
     <section class="media-section" id="s9">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section9.mp4" type="video/mp4" />
       </video>
-      <div class="caption caption--bottom-left caption--light" data-alpha="70">
-        <h2>섹션 9 제목</h2>
-        <p>설명 텍스트.</p>
-      </div>
     </section>
 
     <section class="media-section" id="s10">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section10.mp4" type="video/mp4" />
       </video>
-      <div class="caption caption--top-right caption--dark" data-alpha="55">
-        <h2>섹션 10 제목</h2>
-        <p>설명 텍스트.</p>
-      </div>
+
     </section>
 
     <section class="media-section" id="s11">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section11.mp4" type="video/mp4" />
       </video>
-      <div class="caption caption--center caption--light" data-alpha="85">
-        <h2>섹션 11 제목</h2>
-        <p>설명 텍스트.</p>
-      </div>
     </section>
 
     <section class="media-section" id="s12">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section12.mp4" type="video/mp4" />
       </video>
-      <div class="caption caption--bottom-right caption--dark" data-alpha="48">
-        <h2>섹션 12 제목</h2>
-        <p>설명 텍스트.</p>
-      </div>
     </section>
 
     <section class="media-section" id="s13">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section13.mp4" type="video/mp4" />
       </video>
-      <div class="caption caption--bottom-left caption--light" data-alpha="75">
-        <h2>섹션 13 제목</h2>
-        <p>설명 텍스트.</p>
-      </div>
     </section>
 
     <section class="media-section" id="s14">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section14.mp4" type="video/mp4" />
       </video>
-      <div class="caption caption--top-left caption--dark" data-alpha="45">
-        <h2>섹션 14 제목</h2>
-        <p>설명 텍스트.</p>
-      </div>
     </section>
 
     <section class="media-section" id="s15">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section15.mp4" type="video/mp4" />
       </video>
-      <div class="caption caption--top-right caption--light" data-alpha="65">
-        <h2>섹션 15 제목</h2>
-        <p>설명 텍스트.</p>
-      </div>
     </section>
 
     <section class="media-section" id="s16">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section16.mp4" type="video/mp4" />
       </video>
-      <div class="caption caption--center caption--dark" data-alpha="52">
-        <h2>생산 가능 인구 한 명이 부양해야 하는 노인 인구 1.2명.</h2>
-        <p>이것은 더 이상 통계가 아닌, 한 청년이 짊어진 삶의 무게입니다.</p>
-      </div>
-    </section> 
+    </section>
 
     <section class="media-section" id="s17">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section17.mp4" type="video/mp4" />
       </video>
-      <div class="caption caption--bottom-left caption--light" data-alpha="78">
+       <div class="caption caption--bottom-left caption--dark" data-alpha="45">
+        <h2>생산 가능 인구 한 명이 부양해야 하는 노인 인구 1.2명.</h2>
+        <p>이것은 더 이상 통계가 아닌, 한 청년이 짊어진 삶의 무게입니다.</p>
+      </div>
+    </section> 
+ 
+    <section class="media-section" id="s18">
+      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
+        <source src="./videos/section18.mp4" type="video/mp4" />
+      </video>
+      <div class="caption caption--bottom-left caption--dark" data-alpha="78">
         <h2>나의 삶을 계획하기 전에, 부양해야 할 가족의 시간을 먼저 헤아려야 하는 세대. </h2>
         <p>그들에게 꿈을 꾸는 것은 사치가 되었습니다.</p>
       </div>
     </section>
 
-    <section class="media-section" id="s18">
-      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
-        <source src="./videos/section18.mp4" type="video/mp4" />
-      </video>
-      <div class="caption caption--top-left caption--dark" data-alpha="40">
-        <h2>섹션 18 제목</h2>
-        <p>설명 텍스트.</p>
-      </div>
-    </section>
+
 
     <section class="media-section" id="s19">
       <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
         <source src="./videos/section19.mp4" type="video/mp4" />
       </video>
-      <div class="caption caption--bottom-right caption--light" data-alpha="70">
-        <h2>섹션 19 제목</h2>
-        <p>설명 텍스트.</p>
-      </div>
-    </section>
-
-    <section class="media-section" id="s20">
-      <video class="fullscreen-media fullscreen-video" muted playsinline preload="metadata" loop>
-        <source src="./videos/section20.mp4" type="video/mp4" />
-      </video>
-      <div class="caption caption--bottom-right caption--light" data-alpha="85">
-        <h2>섹션 20 제목</h2>
-        <p>마지막 섹션. 아래 “다시보기”로 바로 맨 위로.</p>
+      <div class="caption caption--bottom-right caption--dark" data-alpha="85">
+        <h2>우리가 본 장면은 단순한 공상이 아닙니다.<br>우리가 외면해온 현실적인 미래입니다.</h2>
+        <p>다시보기를 눌러 맨 위로 이동하실 수 있습니다.</p>
       </div>
       <!-- ✅ 마지막 섹션에서만 노출 -->
       <button class="scroll-to-top-btn"

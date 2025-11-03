@@ -135,3 +135,69 @@ window.addEventListener('load', () => {
     dotObserver.takeRecords();
   });
 });
+
+// ✅ s1 비디오 종료 → 타이틀 페이드인 + 화면 디밍
+  const introVideo = document.getElementById('introVideo');
+  const introTitle = document.getElementById('introTitle');
+
+  if (introVideo && introTitle) {
+    const reveal = () => {
+      introVideo.classList.add('video-dim'); // styles.css의 디밍 효과
+      introTitle.classList.add('show');      // 타이틀 페이드인
+    };
+
+    // 정상적으로 'ended'가 올 때
+    introVideo.addEventListener('ended', reveal, { once: true });
+
+    // 브라우저별 ended 미발화 대비: 거의 끝나면(0.4s 남으면) 미리 노출
+    let preShown = false;
+    introVideo.addEventListener('timeupdate', () => {
+      if (preShown) return;
+      if (introVideo.duration && (introVideo.duration - introVideo.currentTime) < 0.4) {
+        preShown = true;
+        reveal();
+      }
+    });
+
+    // 자동재생 차단 등으로 영상이 멈춘 경우 대비(3초 폴백)
+    setTimeout(() => {
+      if (!introTitle.classList.contains('show')) reveal();
+    }, 3000);
+  }
+  // ===== Scroll Down: go to next section =====
+(function(){
+  const btn = document.getElementById('scrollDownBtn');
+  if(!btn) return;
+
+  // 스크롤 컨테이너(있으면 사용, 없으면 window 사용)
+  const scroller = document.getElementById('scroller') || document.documentElement;
+  const sections = Array.from(document.querySelectorAll('.media-section'));
+
+  function getCurrentSectionIndex(){
+    // 뷰포트 중앙과 가장 가까운 섹션을 현재 섹션으로 판단
+    const centerY = (scroller === document.documentElement)
+      ? window.innerHeight / 2
+      : scroller.clientHeight / 2;
+
+    let bestIdx = 0, bestDist = Infinity;
+    sections.forEach((sec, i) => {
+      const rect = (scroller === document.documentElement)
+        ? sec.getBoundingClientRect()
+        : sec.getBoundingClientRect(); // scroller 기준도 OK (fixed 레이아웃)
+      const secCenter = rect.top + rect.height / 2;
+      const dist = Math.abs(secCenter - centerY);
+      if (dist < bestDist) { bestDist = dist; bestIdx = i; }
+    });
+    return bestIdx;
+  }
+
+  function scrollToNext(){
+    if (!sections.length) return;
+    const idx = getCurrentSectionIndex();
+    const next = sections[Math.min(idx + 1, sections.length - 1)];
+    next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  btn.addEventListener('click', scrollToNext);
+})();
+
